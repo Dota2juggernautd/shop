@@ -99,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
     private void setToView(){
         productsList.addAll(products.getProducts());
         setAdapter();
+
     }
     private void setMainCardData(){
         name_pro.setText(productsList.get());
