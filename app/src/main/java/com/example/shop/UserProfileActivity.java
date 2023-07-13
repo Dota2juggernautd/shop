@@ -50,34 +50,26 @@ public class UserProfileActivity extends AppCompatActivity {
         sharedPreferences = getSharedPreferences("MySharedPref", MODE_PRIVATE);
     }
     private void onClickBtn(){
-        select_img.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageChooser();
-            }
-        });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!sourname_pr.getText().toString().trim().isEmpty() && !login_pr.getText().toString().trim().isEmpty() && !password_pr.getText().toString().trim().isEmpty() && !name_pr.getText().toString().trim().isEmpty()) {
-                    SharedPreferences.Editor myEdit = sharedPreferences.edit();
-                    myEdit.putString("sourname_pr", sourname_pr.getText().toString());
-                    myEdit.putString("login_pr", login_pr.getText().toString());
-                    myEdit.putString("password_pr", password_pr.getText().toString());
-                    myEdit.putString("name_pr", name_pr.getText().toString());
-                    myEdit.putString("img",IVPreviewImage.toString());
-                    myEdit.apply();
-                    Intent intent = new Intent(UserProfileActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    Log.d("sourname_pr", sourname_pr.getText().toString());
-                    Log.d("login_pr", login_pr.getText().toString());
-                    Log.d("password_pr", password_pr.getText().toString());
-                    Log.d("name_pr", name_pr.getText().toString());
-                    Toast.makeText(UserProfileActivity.this, "Your Data has been saved", Toast.LENGTH_SHORT).show();
+        select_img.setOnClickListener(v -> imageChooser());
+        save.setOnClickListener(v -> {
+            if (!sourname_pr.getText().toString().trim().isEmpty() && !login_pr.getText().toString().trim().isEmpty() && !password_pr.getText().toString().trim().isEmpty() && !name_pr.getText().toString().trim().isEmpty()) {
+                SharedPreferences.Editor myEdit = sharedPreferences.edit();
+                myEdit.putString("sourname_pr", sourname_pr.getText().toString());
+                myEdit.putString("login_pr", login_pr.getText().toString());
+                myEdit.putString("password_pr", password_pr.getText().toString());
+                myEdit.putString("name_pr", name_pr.getText().toString());
+                myEdit.putString("img",IVPreviewImage.toString());
+                myEdit.apply();
+                Intent intent = new Intent(UserProfileActivity.this, HomeActivity.class);
+                startActivity(intent);
+                Log.d("sourname_pr", sourname_pr.getText().toString());
+                Log.d("login_pr", login_pr.getText().toString());
+                Log.d("password_pr", password_pr.getText().toString());
+                Log.d("name_pr", name_pr.getText().toString());
+                Toast.makeText(UserProfileActivity.this, "Your Data has been saved", Toast.LENGTH_SHORT).show();
 
-                }else {
-                    Toast.makeText(UserProfileActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
-                }
+            }else {
+                Toast.makeText(UserProfileActivity.this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             }
         });
         back_to_home.setOnClickListener(new View.OnClickListener() {
@@ -112,6 +104,7 @@ public class UserProfileActivity extends AppCompatActivity {
                 Uri selectedImageUri = data.getData();
                 if (null != selectedImageUri) {
                     IVPreviewImage.setImageURI(selectedImageUri);
+
                 }
             }
         }

@@ -1,66 +1,109 @@
 package com.example.shop.Home;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.shop.ApiService;
+import com.example.shop.Product;
+import com.example.shop.Products;
 import com.example.shop.R;
-import com.example.shop.State;
-import com.example.shop.StateAdapter;
+import com.example.shop.Retrofits.ApiHost;
+import com.example.shop.ProductAdapter;
 import com.example.shop.UserProfileActivity;
 
 import java.util.ArrayList;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity {
 
-    ArrayList<State> states = new ArrayList<State>();
-    ImageView profile_button;
-    String get_shared_img;
+    final String TAG = "HomeActivity";
+    ArrayList<Product> productsList = new ArrayList<>();
+    Products products = new Products();
+    ImageView profile_button,img;
+    TextView name_pro,rating_pro,description_pro;
     SharedPreferences preferences;
+    int a;
+    RecyclerView recyclerView ;
+    ProductAdapter productAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
         initView();
-        getData();
+        onClickBtn();
+        getProducts();
 
-        clickBtn();
-        setInitialData();
 
     }
-    private void initView(){
-        RecyclerView recyclerView = findViewById(R.id.list);
-        StateAdapter adapter = new StateAdapter(this, states);
-        recyclerView.setAdapter(adapter);
+
+    private void initView() {
+        recyclerView = findViewById(R.id.rv_products);
         profile_button = findViewById(R.id.profile_button);
-        preferences = getSharedPreferences("MySharedPref",0);
+        name_pro = findViewById(R.id.name_pro);
+        description_pro = findViewById(R.id.description_pro);
+        rating_pro = findViewById(R.id.rating);
+        preferences = getSharedPreferences("MySharedPref", 0);
     }
-    private void clickBtn(){
-        profile_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
-                startActivity(intent);
-            }
+    private void setAdapter(){
+        productAdapter = new ProductAdapter(this, productsList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(productAdapter);
+
+
+    }
+
+    private void onClickBtn() {
+        profile_button.setOnClickListener(v -> {
+            Intent intent = new Intent(HomeActivity.this, UserProfileActivity.class);
+            startActivity(intent);
         });
+    }
+
+    public void getProducts () {
+        ApiService apiService = ApiHost.getRetrofitInstance().create(ApiService.class);
+        Call<Products> getProducts = apiService.getProducts();
+        Log.e("Url= ", getProducts.request().url().toString());
+        getProducts.enqueue(new Callback<Products>() {
+                                    @SuppressLint("SetTextI18n")
+                                    @Override
+                                    public void onResponse(Call<Products> call, Response<Products> response) {
+                                        products = response.body();
+                                        Log.e(TAG, "onResponse: "+ response.body().getTotal());
+                                        setToView();
+
+                                    }
+                                    @Override
+                                    public void onFailure(Call<Products> call, Throwable t) {
+                                        Toast.makeText(HomeActivity.this, "Error", Toast.LENGTH_SHORT).show();
+                                        Log.e(TAG, t.getMessage());
+                                    }
+                                }
+        );
+    }
+    private void setToView(){
+        productsList.addAll(products.getProducts());
+        setAdapter();
+    }
+    private void setMainCardData(){
+        name_pro.setText(productsList.get());
+
 
     }
-    private void setInitialData(){
-        states.add(new State ("Smart Apple Watch SE", "Jode Electronics", R.drawable.whatch , (float) 169.54));
-        states.add(new State ("HP Laptop - 10th generation", "Maddy Workspaces", R.drawable.laptop,(float) 499.99));
-        states.add(new State ("Logitech G433 Headset", "Zone Electrons", R.drawable.headset ,(float) 69.69));
-        states.add(new State ("Wooden Monitor Stand", "Walnus Home", R.drawable.monitor_stand ,(float) 169.54));
-        states.add(new State ("Чили", "Сантьяго", R.drawable.laptop ,(float) 169.54));
-    }
-    private void getData(){
-        get_shared_img = preferences.getString("img","-1");
 
-
-    }
 }

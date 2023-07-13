@@ -27,6 +27,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        android:id="@+id/btn_backed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/whishlist"
@@ -47,15 +48,15 @@
 
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list"
+        android:id="@+id/rv_products"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
-
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout"
+        app:layout_constraintVertical_bias="0.0" />
 
     <RelativeLayout
         android:id="@+id/relativeLayout"
@@ -91,6 +92,7 @@
             below are the two widgets imageview and text view we are displaying inside our card view.
             -->
             <TextView
+                android:id="@+id/name_pro"
                 android:layout_width="215dp"
                 android:layout_height="74dp"
                 android:layout_margin="25dp"
@@ -102,24 +104,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rate"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                  android:layout_marginBottom="15dp"
                 />
 
             <TextView
+                android:id="@+id/description_pro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="25dp"
                 android:textSize="12dp"
                 android:textColor="@color/gray"
-                android:layout_marginTop="88dp"
+                android:layout_marginTop="95dp"
                 android:text="Hughlan Workspaces" />
             <TextView
+                android:id="@+id/rating_pro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="15dp"
                 android:textColor="@color/white"
                 android:text="4.6"
+                android:layout_marginTop="10dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="15dp"
                 android:layout_marginRight="18dp"
